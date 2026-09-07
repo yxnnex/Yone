@@ -87,7 +87,7 @@
       fill: currentColor;
     }
 
-    /* Animación de vibración para los iconos */
+    /* Animación de vibración */
     .social-btn:hover i,
     .social-btn:hover .x-logo-svg {
       animation: vibrate 0.3s linear infinite;
@@ -151,15 +151,16 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
   <script>
-    // ⚠️ REEMPLAZA CON TUS DATOS DE CONSOLA DE FIREBASE ⚠️
+    // Credenciales de tu proyecto Firebase
     const firebaseConfig = {
-      apiKey: "TU_API_KEY",
-      authDomain: "TU_PROYECTO.firebaseapp.com",
-      databaseURL: "https://TU_PROYECTO-default-rtdb.firebaseio.com",
-      projectId: "TU_PROYECTO",
-      storageBucket: "TU_PROYECTO.appspot.com",
-      messagingSenderId: "NUMERO",
-      appId: "ID_APP"
+      apiKey: "AIzaSyC0zaRCYqWu2JhXGvxdu7mkUv_wOHP8IHA",
+      authDomain: "contador-39793.firebaseapp.com",
+      databaseURL: "https://contador-39793-default-rtdb.firebaseio.com",
+      projectId: "contador-39793",
+      storageBucket: "contador-39793.firebasestorage.app",
+      messagingSenderId: "735364335099",
+      appId: "1:735364335099:web:9d35e7a699991f6a00775e",
+      measurementId: "G-QTGH9547S8"
     };
 
     // Inicializar Firebase
@@ -167,7 +168,7 @@
     const db = firebase.database();
     const BASE_OFFSET = 344;
 
-    // Manejo de VISITAS
+    // Incrementar y escuchar VISITAS
     const visitsRef = db.ref('stats/visits');
     visitsRef.transaction(current => (current || 0) + 1);
     visitsRef.on('value', snapshot => {
