@@ -64,6 +64,7 @@
       font-weight: 600;
       backdrop-filter: blur(8px);
       transition: background 0.3s, border-color 0.3s;
+      cursor: pointer;
     }
 
     .social-btn:hover {
@@ -120,7 +121,7 @@
     </div>
 
     <!-- Instagram -->
-    <a href="https://instagram.com/s2yxne" target="_blank" class="social-btn" onclick="registerClick('instagram')">
+    <a href="https://instagram.com/s2yxne" target="_blank" class="social-btn" onclick="registerClick(event, 'instagram', 'https://instagram.com/s2yxne')">
       <div class="btn-content">
         <i class="fa-brands fa-instagram"></i>
         <span>Instagram</span>
@@ -129,7 +130,7 @@
     </a>
 
     <!-- X (Twitter) -->
-    <a href="https://x.com/1yone" target="_blank" class="social-btn" onclick="registerClick('x')">
+    <a href="https://x.com/1yone" target="_blank" class="social-btn" onclick="registerClick(event, 'x', 'https://x.com/1yone')">
       <div class="btn-content">
         <svg class="x-logo-svg" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
@@ -140,7 +141,7 @@
     </a>
 
     <!-- Kick -->
-    <a href="https://kick.com/s2yone" target="_blank" class="social-btn" onclick="registerClick('kick')">
+    <a href="https://kick.com/s2yone" target="_blank" class="social-btn" onclick="registerClick(event, 'kick', 'https://kick.com/s2yone')">
       <div class="btn-content">
         <i class="fa-solid fa-headset"></i>
         <span>Kick</span>
@@ -149,7 +150,7 @@
     </a>
 
     <!-- Spotify -->
-    <a href="https://open.spotify.com/user/21esyubm7t5l4qnr3ewfvv3ji" target="_blank" class="social-btn" onclick="registerClick('spotify')">
+    <a href="https://open.spotify.com/user/21esyubm7t5l4qnr3ewfvv3ji" target="_blank" class="social-btn" onclick="registerClick(event, 'spotify', 'https://open.spotify.com/user/21esyubm7t5l4qnr3ewfvv3ji')">
       <div class="btn-content">
         <i class="fa-brands fa-spotify"></i>
         <span>Spotify</span>
@@ -159,38 +160,41 @@
   </div>
 
   <script>
-    // Tu identificador único para guardar los datos en la nube
-    const SITE_NAMESPACE = 's2yone-links-344'; 
-    const OFFSET = 344; // Suma base para iniciar todo en 344
+    // Identificador único para guardar tus datos en CounterAPI
+    const NAMESPACE = 's2yone_redes_344';
+    const BASE_OFFSET = 344;
 
-    // 1. Registrar y obtener VISITAS GLOBALES
-    fetch(`https://api.countapi.xyz/hit/${SITE_NAMESPACE}/visits`)
+    // 1. VISITAS GLOBALES (Incrementar al entrar)
+    fetch(`https://api.counterapi.dev/v1/${NAMESPACE}/visitas/up`)
       .then(res => res.json())
       .then(data => {
-        document.getElementById('visit-count').innerText = data.value + OFFSET;
+        document.getElementById('visit-count').innerText = (data.count || 0) + BASE_OFFSET;
       })
-      .catch(() => document.getElementById('visit-count').innerText = OFFSET);
+      .catch(() => document.getElementById('visit-count').innerText = BASE_OFFSET);
 
-    // 2. Obtener CLICS GLOBALES de cada red social
+    // 2. OBTENER CLICS GLOBALES (Al cargar la página)
     const networks = ['instagram', 'x', 'kick', 'spotify'];
-
     networks.forEach(net => {
-      fetch(`https://api.countapi.xyz/get/${SITE_NAMESPACE}/${net}`)
+      fetch(`https://api.counterapi.dev/v1/${NAMESPACE}/click_${net}`)
         .then(res => res.json())
         .then(data => {
-          const total = (data.value || 0) + OFFSET;
-          document.getElementById(`clicks-${net}`).innerText = total;
+          document.getElementById(`clicks-${net}`).innerText = (data.count || 0) + BASE_OFFSET;
         })
-        .catch(() => document.getElementById(`clicks-${net}`).innerText = OFFSET);
+        .catch(() => document.getElementById(`clicks-${net}`).innerText = BASE_OFFSET);
     });
 
-    // 3. Registrar CLIC GLOBAL cuando alguien pulsa un botón
-    function registerClick(net) {
-      fetch(`https://api.countapi.xyz/hit/${SITE_NAMESPACE}/${net}`)
+    // 3. REGISTRAR CLIC Y NAVEGAR
+    function registerClick(event, net, url) {
+      event.preventDefault(); // Detiene el salto inmediato para guardar la petición
+      
+      fetch(`https://api.counterapi.dev/v1/${NAMESPACE}/click_${net}/up`)
         .then(res => res.json())
         .then(data => {
-          const total = data.value + OFFSET;
-          document.getElementById(`clicks-${net}`).innerText = total;
+          document.getElementById(`clicks-${net}`).innerText = (data.count || 0) + BASE_OFFSET;
+          window.open(url, '_blank');
+        })
+        .catch(() => {
+          window.open(url, '_blank');
         });
     }
   </script>
