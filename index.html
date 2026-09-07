@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mis Redes</title>
-  <!-- Iconos de FontAwesome para las redes sociales -->
+  <!-- Iconos de FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
@@ -17,7 +17,7 @@
 
     body {
       background-color: #000000;
-      background-image: url('fondo.png'); /* Carga tu imagen cuando la subas */
+      background-image: url('fondo.png'); /* Se aplicará la imagen cuando la subas */
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -39,7 +39,7 @@
       align-items: center;
     }
 
-    /* Contador de Visitas */
+    /* Contador de Visitas Generales */
     .visits-counter {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -51,14 +51,14 @@
       backdrop-filter: blur(5px);
     }
 
-    /* Botones estilo Instagram */
+    /* Botones transparentes estilo Instagram */
     .social-btn {
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 14px 20px;
-      background: rgba(255, 255, 255, 0.08); /* Transparente */
+      background: rgba(255, 255, 255, 0.08); /* Fondo semi-transparente */
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
       color: #ffffff;
@@ -98,7 +98,7 @@
       100% { transform: translate(0); }
     }
 
-    /* Contador de clics individual */
+    /* Insignia de conteo de clics */
     .click-badge {
       background: rgba(255, 255, 255, 0.15);
       padding: 4px 10px;
@@ -111,12 +111,12 @@
 <body>
 
   <div class="container">
-    <!-- Marcador de Visitas Totales -->
+    <!-- Contador de Visitas a la Web -->
     <div class="visits-counter">
-      👁 Visitas a la página: <span id="visit-count">0</span>
+      👁 Visitas: <span id="visit-count">0</span>
     </div>
 
-    <!-- Botón Instagram -->
+    <!-- Instagram -->
     <a href="https://instagram.com/s2yxne" target="_blank" class="social-btn" onclick="registerClick('instagram')">
       <div class="btn-content">
         <i class="fa-brands fa-instagram"></i>
@@ -125,7 +125,7 @@
       <span class="click-badge"><span id="clicks-instagram">0</span> clics</span>
     </a>
 
-    <!-- Botón X -->
+    <!-- X (Twitter) -->
     <a href="https://x.com/1yone" target="_blank" class="social-btn" onclick="registerClick('x')">
       <div class="btn-content">
         <i class="fa-brands fa-x-twitter"></i>
@@ -134,17 +134,16 @@
       <span class="click-badge"><span id="clicks-x">0</span> clics</span>
     </a>
 
-    <!-- Botón Kick -->
+    <!-- Kick -->
     <a href="https://kick.com/s2yone" target="_blank" class="social-btn" onclick="registerClick('kick')">
       <div class="btn-content">
-        <!-- Icono alternativo para Kick -->
         <i class="fa-solid fa-headset"></i>
         <span>Kick</span>
       </div>
       <span class="click-badge"><span id="clicks-kick">0</span> clics</span>
     </a>
 
-    <!-- Botón Spotify -->
+    <!-- Spotify -->
     <a href="https://open.spotify.com/user/21esyubm7t5l4qnr3ewfvv3ji" target="_blank" class="social-btn" onclick="registerClick('spotify')">
       <div class="btn-content">
         <i class="fa-brands fa-spotify"></i>
@@ -155,22 +154,22 @@
   </div>
 
   <script>
-    // Conteo de Visitas a la página
+    // Contador de visitas
     let visits = localStorage.getItem('page_visits') || 0;
     visits++;
     localStorage.setItem('page_visits', visits);
     document.getElementById('visit-count').innerText = visits;
 
-    // Redes soportadas
+    // Redes sociales
     const networks = ['instagram', 'x', 'kick', 'spotify'];
 
-    // Cargar clics guardados al iniciar
+    // Cargar clics almacenados
     networks.forEach(net => {
       const savedClicks = localStorage.getItem(`clicks_${net}`) || 0;
       document.getElementById(`clicks-${net}`).innerText = savedClicks;
     });
 
-    // Función para registrar clics
+    // Registrar nuevos clics
     function registerClick(net) {
       let currentClicks = localStorage.getItem(`clicks_${net}`) || 0;
       currentClicks++;
