@@ -86,7 +86,7 @@
       fill: currentColor;
     }
 
-    /* Animación de vibración para los iconos al pasar el ratón */
+    /* Animación de vibración */
     .social-btn:hover i,
     .social-btn:hover .x-logo-svg {
       animation: vibrate 0.3s linear infinite;
@@ -116,7 +116,7 @@
   <div class="container">
     <!-- Contador de Visitas a la Web -->
     <div class="visits-counter">
-      👁 Visitas: <span id="visit-count">344</span>
+      👁 Visitas: <span id="visit-count">...</span>
     </div>
 
     <!-- Instagram -->
@@ -125,7 +125,7 @@
         <i class="fa-brands fa-instagram"></i>
         <span>Instagram</span>
       </div>
-      <span class="click-badge"><span id="clicks-instagram">344</span> clics</span>
+      <span class="click-badge"><span id="clicks-instagram">...</span> clics</span>
     </a>
 
     <!-- X (Twitter) -->
@@ -136,7 +136,7 @@
         </svg>
         <span>X</span>
       </div>
-      <span class="click-badge"><span id="clicks-x">344</span> clics</span>
+      <span class="click-badge"><span id="clicks-x">...</span> clics</span>
     </a>
 
     <!-- Kick -->
@@ -145,7 +145,7 @@
         <i class="fa-solid fa-headset"></i>
         <span>Kick</span>
       </div>
-      <span class="click-badge"><span id="clicks-kick">344</span> clics</span>
+      <span class="click-badge"><span id="clicks-kick">...</span> clics</span>
     </a>
 
     <!-- Spotify -->
@@ -154,42 +154,44 @@
         <i class="fa-brands fa-spotify"></i>
         <span>Spotify</span>
       </div>
-      <span class="click-badge"><span id="clicks-spotify">344</span> clics</span>
+      <span class="click-badge"><span id="clicks-spotify">...</span> clics</span>
     </a>
   </div>
 
   <script>
-    const INITIAL_VALUE = 344;
+    // Tu identificador único para guardar los datos en la nube
+    const SITE_NAMESPACE = 's2yone-links-344'; 
+    const OFFSET = 344; // Suma base para iniciar todo en 344
 
-    // Contador de visitas
-    let visits = localStorage.getItem('page_visits');
-    if (visits === null) {
-      visits = INITIAL_VALUE;
-    } else {
-      visits = parseInt(visits) + 1;
-    }
-    localStorage.setItem('page_visits', visits);
-    document.getElementById('visit-count').innerText = visits;
+    // 1. Registrar y obtener VISITAS GLOBALES
+    fetch(`https://api.countapi.xyz/hit/${SITE_NAMESPACE}/visits`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('visit-count').innerText = data.value + OFFSET;
+      })
+      .catch(() => document.getElementById('visit-count').innerText = OFFSET);
 
-    // Redes sociales
+    // 2. Obtener CLICS GLOBALES de cada red social
     const networks = ['instagram', 'x', 'kick', 'spotify'];
 
-    // Cargar clics almacenados
     networks.forEach(net => {
-      let savedClicks = localStorage.getItem(`clicks_${net}`);
-      if (savedClicks === null) {
-        savedClicks = INITIAL_VALUE;
-        localStorage.setItem(`clicks_${net}`, INITIAL_VALUE);
-      }
-      document.getElementById(`clicks-${net}`).innerText = savedClicks;
+      fetch(`https://api.countapi.xyz/get/${SITE_NAMESPACE}/${net}`)
+        .then(res => res.json())
+        .then(data => {
+          const total = (data.value || 0) + OFFSET;
+          document.getElementById(`clicks-${net}`).innerText = total;
+        })
+        .catch(() => document.getElementById(`clicks-${net}`).innerText = OFFSET);
     });
 
-    // Registrar nuevos clics
+    // 3. Registrar CLIC GLOBAL cuando alguien pulsa un botón
     function registerClick(net) {
-      let currentClicks = parseInt(localStorage.getItem(`clicks_${net}`) || INITIAL_VALUE);
-      currentClicks++;
-      localStorage.setItem(`clicks_${net}`, currentClicks);
-      document.getElementById(`clicks-${net}`).innerText = currentClicks;
+      fetch(`https://api.countapi.xyz/hit/${SITE_NAMESPACE}/${net}`)
+        .then(res => res.json())
+        .then(data => {
+          const total = data.value + OFFSET;
+          document.getElementById(`clicks-${net}`).innerText = total;
+        });
     }
   </script>
 
