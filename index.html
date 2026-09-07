@@ -54,7 +54,7 @@
       width: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       padding: 14px 20px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -87,7 +87,7 @@
       fill: currentColor;
     }
 
-    /* Animación de vibración */
+    /* Animación de vibración para los iconos */
     .social-btn:hover i,
     .social-btn:hover .x-logo-svg {
       animation: vibrate 0.3s linear infinite;
@@ -101,15 +101,6 @@
       80% { transform: translate(2px, -2px); }
       100% { transform: translate(0); }
     }
-
-    /* Insignia de conteo de clics */
-    .click-badge {
-      background: rgba(255, 255, 255, 0.15);
-      padding: 4px 10px;
-      border-radius: 10px;
-      font-size: 0.75rem;
-      color: #dddddd;
-    }
   </style>
 </head>
 <body>
@@ -121,82 +112,68 @@
     </div>
 
     <!-- Instagram -->
-    <a href="https://instagram.com/s2yxne" target="_blank" class="social-btn" onclick="registerClick(event, 'instagram', 'https://instagram.com/s2yxne')">
+    <a href="https://instagram.com/s2yxne" target="_blank" class="social-btn">
       <div class="btn-content">
         <i class="fa-brands fa-instagram"></i>
         <span>Instagram</span>
       </div>
-      <span class="click-badge"><span id="clicks-instagram">...</span> clics</span>
     </a>
 
     <!-- X (Twitter) -->
-    <a href="https://x.com/1yone" target="_blank" class="social-btn" onclick="registerClick(event, 'x', 'https://x.com/1yone')">
+    <a href="https://x.com/1Yone_" target="_blank" class="social-btn">
       <div class="btn-content">
         <svg class="x-logo-svg" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
         </svg>
         <span>X</span>
       </div>
-      <span class="click-badge"><span id="clicks-x">...</span> clics</span>
     </a>
 
     <!-- Kick -->
-    <a href="https://kick.com/s2yone" target="_blank" class="social-btn" onclick="registerClick(event, 'kick', 'https://kick.com/s2yone')">
+    <a href="https://kick.com/s2yone" target="_blank" class="social-btn">
       <div class="btn-content">
         <i class="fa-solid fa-headset"></i>
         <span>Kick</span>
       </div>
-      <span class="click-badge"><span id="clicks-kick">...</span> clics</span>
     </a>
 
     <!-- Spotify -->
-    <a href="https://open.spotify.com/user/21esyubm7t5l4qnr3ewfvv3ji" target="_blank" class="social-btn" onclick="registerClick(event, 'spotify', 'https://open.spotify.com/user/21esyubm7t5l4qnr3ewfvv3ji')">
+    <a href="https://open.spotify.com/user/21esyubm7t5l4qnr3ewfvv3ji" target="_blank" class="social-btn">
       <div class="btn-content">
         <i class="fa-brands fa-spotify"></i>
         <span>Spotify</span>
       </div>
-      <span class="click-badge"><span id="clicks-spotify">...</span> clics</span>
     </a>
   </div>
 
+  <!-- Carga de librerías oficiales de Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
   <script>
-    // Identificador único para guardar tus datos en CounterAPI
-    const NAMESPACE = 's2yone_redes_344';
+    // ⚠️ REEMPLAZA CON TUS DATOS DE CONSOLA DE FIREBASE ⚠️
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_PROYECTO.firebaseapp.com",
+      databaseURL: "https://TU_PROYECTO-default-rtdb.firebaseio.com",
+      projectId: "TU_PROYECTO",
+      storageBucket: "TU_PROYECTO.appspot.com",
+      messagingSenderId: "NUMERO",
+      appId: "ID_APP"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
     const BASE_OFFSET = 344;
 
-    // 1. VISITAS GLOBALES (Incrementar al entrar)
-    fetch(`https://api.counterapi.dev/v1/${NAMESPACE}/visitas/up`)
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('visit-count').innerText = (data.count || 0) + BASE_OFFSET;
-      })
-      .catch(() => document.getElementById('visit-count').innerText = BASE_OFFSET);
-
-    // 2. OBTENER CLICS GLOBALES (Al cargar la página)
-    const networks = ['instagram', 'x', 'kick', 'spotify'];
-    networks.forEach(net => {
-      fetch(`https://api.counterapi.dev/v1/${NAMESPACE}/click_${net}`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById(`clicks-${net}`).innerText = (data.count || 0) + BASE_OFFSET;
-        })
-        .catch(() => document.getElementById(`clicks-${net}`).innerText = BASE_OFFSET);
+    // Manejo de VISITAS
+    const visitsRef = db.ref('stats/visits');
+    visitsRef.transaction(current => (current || 0) + 1);
+    visitsRef.on('value', snapshot => {
+      const val = snapshot.val() || 0;
+      document.getElementById('visit-count').innerText = val + BASE_OFFSET;
     });
-
-    // 3. REGISTRAR CLIC Y NAVEGAR
-    function registerClick(event, net, url) {
-      event.preventDefault(); // Detiene el salto inmediato para guardar la petición
-      
-      fetch(`https://api.counterapi.dev/v1/${NAMESPACE}/click_${net}/up`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById(`clicks-${net}`).innerText = (data.count || 0) + BASE_OFFSET;
-          window.open(url, '_blank');
-        })
-        .catch(() => {
-          window.open(url, '_blank');
-        });
-    }
   </script>
 
 </body>
