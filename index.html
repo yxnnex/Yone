@@ -17,10 +17,8 @@
 
     body {
       background-color: #000000;
-      background-image: url('fondo.png'); /* Se aplicará la imagen cuando la subas */
+      background: #000000 url("./fondo.jpg") no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
       color: #ffffff;
       min-height: 100vh;
       display: flex;
@@ -58,7 +56,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 14px 20px;
-      background: rgba(255, 255, 255, 0.08); /* Fondo semi-transparente */
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
       color: #ffffff;
@@ -79,13 +77,18 @@
       gap: 12px;
     }
 
-    .btn-content i {
+    .btn-content i,
+    .btn-content .x-logo-svg {
+      width: 22px;
+      height: 22px;
       font-size: 1.4rem;
       display: inline-block;
+      fill: currentColor;
     }
 
-    /* Animación de vibración para el icono al pasar el ratón */
-    .social-btn:hover i {
+    /* Animación de vibración para los iconos al pasar el ratón */
+    .social-btn:hover i,
+    .social-btn:hover .x-logo-svg {
       animation: vibrate 0.3s linear infinite;
     }
 
@@ -128,7 +131,9 @@
     <!-- X (Twitter) -->
     <a href="https://x.com/1yone" target="_blank" class="social-btn" onclick="registerClick('x')">
       <div class="btn-content">
-        <i class="fa-brands fa-x-twitter"></i>
+        <svg class="x-logo-svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+        </svg>
         <span>X</span>
       </div>
       <span class="click-badge"><span id="clicks-x">0</span> clics</span>
