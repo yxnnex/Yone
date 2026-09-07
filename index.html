@@ -116,7 +116,7 @@
   <div class="container">
     <!-- Contador de Visitas a la Web -->
     <div class="visits-counter">
-      👁 Visitas: <span id="visit-count">0</span>
+      👁 Visitas: <span id="visit-count">344</span>
     </div>
 
     <!-- Instagram -->
@@ -125,7 +125,7 @@
         <i class="fa-brands fa-instagram"></i>
         <span>Instagram</span>
       </div>
-      <span class="click-badge"><span id="clicks-instagram">0</span> clics</span>
+      <span class="click-badge"><span id="clicks-instagram">344</span> clics</span>
     </a>
 
     <!-- X (Twitter) -->
@@ -136,7 +136,7 @@
         </svg>
         <span>X</span>
       </div>
-      <span class="click-badge"><span id="clicks-x">0</span> clics</span>
+      <span class="click-badge"><span id="clicks-x">344</span> clics</span>
     </a>
 
     <!-- Kick -->
@@ -145,7 +145,7 @@
         <i class="fa-solid fa-headset"></i>
         <span>Kick</span>
       </div>
-      <span class="click-badge"><span id="clicks-kick">0</span> clics</span>
+      <span class="click-badge"><span id="clicks-kick">344</span> clics</span>
     </a>
 
     <!-- Spotify -->
@@ -154,14 +154,20 @@
         <i class="fa-brands fa-spotify"></i>
         <span>Spotify</span>
       </div>
-      <span class="click-badge"><span id="clicks-spotify">0</span> clics</span>
+      <span class="click-badge"><span id="clicks-spotify">344</span> clics</span>
     </a>
   </div>
 
   <script>
+    const INITIAL_VALUE = 344;
+
     // Contador de visitas
-    let visits = localStorage.getItem('page_visits') || 0;
-    visits++;
+    let visits = localStorage.getItem('page_visits');
+    if (visits === null) {
+      visits = INITIAL_VALUE;
+    } else {
+      visits = parseInt(visits) + 1;
+    }
     localStorage.setItem('page_visits', visits);
     document.getElementById('visit-count').innerText = visits;
 
@@ -170,13 +176,17 @@
 
     // Cargar clics almacenados
     networks.forEach(net => {
-      const savedClicks = localStorage.getItem(`clicks_${net}`) || 0;
+      let savedClicks = localStorage.getItem(`clicks_${net}`);
+      if (savedClicks === null) {
+        savedClicks = INITIAL_VALUE;
+        localStorage.setItem(`clicks_${net}`, INITIAL_VALUE);
+      }
       document.getElementById(`clicks-${net}`).innerText = savedClicks;
     });
 
     // Registrar nuevos clics
     function registerClick(net) {
-      let currentClicks = localStorage.getItem(`clicks_${net}`) || 0;
+      let currentClicks = parseInt(localStorage.getItem(`clicks_${net}`) || INITIAL_VALUE);
       currentClicks++;
       localStorage.setItem(`clicks_${net}`, currentClicks);
       document.getElementById(`clicks-${net}`).innerText = currentClicks;
