@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Redes</title>
+  <!-- Iconos de FontAwesome para las redes sociales -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #000000;
+      background-image: url('fondo.png'); /* Carga tu imagen cuando la subas */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    /* Contador de Visitas */
+    .visits-counter {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #aaaaaa;
+      margin-bottom: 10px;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Botones estilo Instagram */
+    .social-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.08); /* Transparente */
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-content i {
+      font-size: 1.4rem;
+      display: inline-block;
+    }
+
+    /* Animación de vibración para el icono al pasar el ratón */
+    .social-btn:hover i {
+      animation: vibrate 0.3s linear infinite;
+    }
+
+    @keyframes vibrate {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
+    }
+
+    /* Contador de clics individual */
+    .click-badge {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      color: #dddddd;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Marcador de Visitas Totales -->
+    <div class="visits-counter">
+      👁 Visitas a la página: <span id="visit-count">0</span>
+    </div>
+
+    <!-- Botón Instagram -->
+    <a href="https://instagram.com/s2yxne" target="_blank" class="social-btn" onclick="registerClick('instagram')">
+      <div class="btn-content">
+        <i class="fa-brands fa-instagram"></i>
+        <span>Instagram</span>
+      </div>
+      <span class="click-badge"><span id="clicks-instagram">0</span> clics</span>
+    </a>
+
+    <!-- Botón X -->
+    <a href="https://x.com/1yone" target="_blank" class="social-btn" onclick="registerClick('x')">
+      <div class="btn-content">
+        <i class="fa-brands fa-x-twitter"></i>
+        <span>X</span>
+      </div>
+      <span class="click-badge"><span id="clicks-x">0</span> clics</span>
+    </a>
+
+    <!-- Botón Kick -->
+    <a href="https://kick.com/s2yone" target="_blank" class="social-btn" onclick="registerClick('kick')">
+      <div class="btn-content">
+        <!-- Icono alternativo para Kick -->
+        <i class="fa-solid fa-headset"></i>
+        <span>Kick</span>
+      </div>
+      <span class="click-badge"><span id="clicks-kick">0</span> clics</span>
+    </a>
+
+    <!-- Botón Spotify -->
+    <a href="https://open.spotify.com/user/21esyubm7t5l4qnr3ewfvv3ji" target="_blank" class="social-btn" onclick="registerClick('spotify')">
+      <div class="btn-content">
+        <i class="fa-brands fa-spotify"></i>
+        <span>Spotify</span>
+      </div>
+      <span class="click-badge"><span id="clicks-spotify">0</span> clics</span>
+    </a>
+  </div>
+
+  <script>
+    // Conteo de Visitas a la página
+    let visits = localStorage.getItem('page_visits') || 0;
+    visits++;
+    localStorage.setItem('page_visits', visits);
+    document.getElementById('visit-count').innerText = visits;
+
+    // Redes soportadas
+    const networks = ['instagram', 'x', 'kick', 'spotify'];
+
+    // Cargar clics guardados al iniciar
+    networks.forEach(net => {
+      const savedClicks = localStorage.getItem(`clicks_${net}`) || 0;
+      document.getElementById(`clicks-${net}`).innerText = savedClicks;
+    });
+
+    // Función para registrar clics
+    function registerClick(net) {
+      let currentClicks = localStorage.getItem(`clicks_${net}`) || 0;
+      currentClicks++;
+      localStorage.setItem(`clicks_${net}`, currentClicks);
+      document.getElementById(`clicks-${net}`).innerText = currentClicks;
+    }
+  </script>
+
+</body>
+</html>
